@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  guin-app:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "4000:4000"
+    expose:
+      - '4000'
+    volumes:
+      - ./frontend/asset:/go/bin/frontend/asset
+    networks: 
+      - labalaba
+    environment:
+      - APP_NAME=GUIN
+      - MODE=DEV
+    depends_on:
+      - pgsql
+
+  pgsql:
+    container_name: dbguin
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=guin
+    ports:
+      - '5435:5435'
+    volumes: 
+      - dpgsql:/var/lib/postgresql/data
+    networks: 
+      - labalaba
+
+networks:
+  labalaba:
+    name: labalaba
+    driver: bridge
+
+volumes:
+  dpgsql:
+    driver: local
