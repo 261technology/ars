@@ -18,11 +18,11 @@ import (
 	"github.com/harisaginting/guin/common/utils/helper"
 	database "github.com/harisaginting/guin/db"
 	"github.com/harisaginting/guin/frontend"
-	// "github.com/gin-gonic/contrib/secure"
-	// "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
+const projectDirName = "guin" //  project directory name
 func main() {
+	helper.LoadEnv(projectDirName)
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	// tracer.InitTracer()
@@ -32,7 +32,7 @@ func main() {
 	ginConfig(ctx, app)
 
 	// route
-	app.GET("/ping", ping)
+	app.GET("/healthcheck", healthcheck)
 	app.NoRoute(lostInSpce)
 	// FRONTEND
 	app.Static("/static", "./frontend/asset")
@@ -102,11 +102,13 @@ func lostInSpce(c *gin.Context) {
 	})
 }
 
-func ping(c *gin.Context) {
+func healthcheck(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":       http.StatusOK,
 		"port":         os.Getenv("PORT"),
 		"service_name": os.Getenv("APP_NAME"),
+		"mode":         os.Getenv("MODE"),
+		"db_host":      os.Getenv("DB_HOST"),
 	})
 }
 

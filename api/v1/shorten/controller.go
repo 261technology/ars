@@ -3,9 +3,11 @@ package shorten
 import (
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/harisaginting/guin/common/http/response"
+	"github.com/harisaginting/guin/common/log"
 )
 
 type Controller struct {
@@ -45,16 +47,18 @@ func (ctrl *Controller) Status(c *gin.Context) {
 	code := c.Param("code")
 	d, status, err := ctrl.service.Status(ctx, code)
 	switch status {
-	case 200:
+	case http.StatusOK:
 		res := ResponseStatus{
 			StartDate:     d.StartDate,
 			LastSeenDate:  d.LastSeenDate,
 			RedirectCount: d.RedirectCount,
 		}
 		response.StatusOK(c, res)
-	case 404:
+	case http.StatusNotFound:
+		log.Error(ctx, err)
 		response.StatusNotFound(c, err)
 	default:
+		log.Error(ctx, err)
 		response.StatusError(c, err)
 	}
 }
@@ -74,11 +78,13 @@ func (ctrl *Controller) Execute(c *gin.Context) {
 	code := c.Param("code")
 	d, status, err := ctrl.service.Execute(ctx, code)
 	switch status {
-	case 302:
+	case http.StatusFound:
 		response.StatusRedirect(c, d.Url)
-	case 404:
+	case http.StatusNotFound:
+		log.Error(ctx, err)
 		response.StatusNotFound(c, err)
 	default:
+		log.Error(ctx, err)
 		response.StatusError(c, err)
 	}
 }
@@ -100,24 +106,26 @@ func (ctrl *Controller) Create(c *gin.Context) {
 	var requestBody RequestCreate
 	request, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
+		log.Error(ctx, err)
 		response.StatusError(c, err)
 		return
 	}
 	err = json.Unmarshal([]byte(request), &requestBody)
 	if err != nil {
+		log.Error(ctx, err)
 		response.BadRequest(c)
 		return
 	}
 
 	d, status, err := ctrl.service.Create(ctx, requestBody)
 	switch status {
-	case 201:
+	case http.StatusCreated:
 		response.StatusCreated(c, ResponseCreate{Shortcode: d.Shortcode})
-	case 400:
+	case http.StatusNotFound:
 		response.BadRequest(c, err.Error())
-	case 409:
+	case http.StatusConflict:
 		response.StatusConflict(c, err)
-	case 422:
+	case http.StatusUnprocessableEntity:
 		response.StatusUnprocessableEntity(c, err)
 	default:
 		response.StatusError(c, err)

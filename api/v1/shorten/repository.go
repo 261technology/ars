@@ -21,12 +21,12 @@ func (repo *Repository) Get(ctx context.Context, p *Shorten) (err error) {
 		table.ID = p.ID
 		r := qx.First(&table)
 		err = r.Error
-		log.Info(ctx, "ID")
+		log.Error(ctx, err)
 	} else {
 		r := qx.Debug().Where("shortcode = ?", p.Shortcode).First(&table)
-		log.Info(ctx, "CODE")
 		if !database.ErrDb(r.Error) {
 			err = r.Error
+			log.Error(ctx, err)
 		}
 	}
 	if err != nil {
@@ -84,6 +84,7 @@ func (repo *Repository) Create(ctx context.Context, req RequestCreate) (shorten 
 	tx.Create(&shorten)
 	if tx.Error != nil {
 		err = tx.Error
+		log.Error(ctx, err)
 		tx.Rollback()
 	} else {
 		tx.Commit()
@@ -108,6 +109,7 @@ func (repo *Repository) Execute(ctx context.Context, p Shorten) (err error) {
 	tx.Save(&shorten)
 	if tx.Error != nil {
 		err = tx.Error
+		log.Error(ctx, err)
 		tx.Rollback()
 	} else {
 		tx.Commit()
