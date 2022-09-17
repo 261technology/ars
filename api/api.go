@@ -5,10 +5,16 @@ import (
 	shorten "github.com/harisaginting/guin/api/v1/shorten"
 )
 
-type GopherInfo struct {
-	ID, X, Y string
-}
-
+// Swagger Config
+// @title GUIN
+// @version 1.0
+// @description GUIN
+// @host localhost:4000
+// @BasePath /
+// @schemes http
+// @query.collection.format multi
+// @contact.name Harisa Ginting
+// @contact.url ”
 func V1(r *gin.RouterGroup) {
 	// Dependency injection
 	var shortenController shorten.Controller

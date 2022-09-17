@@ -9,6 +9,10 @@ import (
 	"github.com/harisaginting/guin/common/utils/helper"
 )
 
+type Message struct {
+	Message string `json:"message"`
+}
+
 func DefaultAppHeader(c *gin.Context) {
 	tm := time.Now().Unix()
 	c.Writer.Header().Set("App-Name", helper.MustGetEnv("APP_NAME"))

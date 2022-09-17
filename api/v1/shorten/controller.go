@@ -18,6 +18,9 @@ func ProviderController(s Service) Controller {
 	}
 }
 
+/**
+ * @Description list all shorten url
+ */
 func (ctrl *Controller) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -27,6 +30,15 @@ func (ctrl *Controller) Get(c *gin.Context) {
 	response.Json(c, responseBody)
 }
 
+// @Summary check status shortcode
+// @Tags shorten
+// @Description get status shortcode and redirect count
+// @Param code path string true "shortcode url"
+// @Success 200 {object} ResponseList "success get shortcode status"
+// @Failure 404 {object} response.Message "shotcode not found"
+// @Failure 500 {object} response.Message "internal server error"
+// @Produce json
+// @Router /{code}/status [get]
 func (ctrl *Controller) Status(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -47,6 +59,15 @@ func (ctrl *Controller) Status(c *gin.Context) {
 	}
 }
 
+// @Summary execute shortcode
+// @Tags shorten
+// @Description redirect to url by shortcode
+// @Param code path string true "shortcode url"
+// @Success 302 "redirect to shorten url"
+// @Failure 404 {object} response.Message "shotcode not found"
+// @Failure 500 {object} response.Message "internal server error"
+// @Produce json
+// @Router /{code} [get]
 func (ctrl *Controller) Execute(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -62,6 +83,17 @@ func (ctrl *Controller) Execute(c *gin.Context) {
 	}
 }
 
+// @Summary create shortcode
+// @Tags shorten
+// @Description create shorten url and get shortcode
+// @Param bodyRequest body RequestCreate true  "payload create shorten url"
+// @Success 201	{object} ResponseCreate "success"
+// @Failure 400 {object} response.Message "bad request"
+// @Failure 409 {object} response.Message "shortcode already used or not available"
+// @Failure 422 {object} response.Message "shortcode format is invalid"
+// @Failure 500 {object} response.Message "internal server error"
+// @Produce json
+// @Router / [post]
 func (ctrl *Controller) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 
