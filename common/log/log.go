@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 	"runtime"
 	"strings"
-	"github.com/sirupsen/logrus"
+	"time"
+
 	"github.com/orandin/lumberjackrus"
+	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -24,15 +25,15 @@ const (
 // init Set application log and beego log
 func init() {
 	// Set logrus configuration
-	level, err := logrus.ParseLevel("trace")
+	level, err := logrus.ParseLevel("trace") // to be change from .env
 	if err != nil {
 		log.Fatalf("Invalid log level '%s', %s", level, err)
 	}
 
 	// Mkdir log folder
-	t 		 := time.Now().Format("2006-01-02")
-	filePath := fmt.Sprintf("./logs/%s.log",t)
-	dir 	 := "./logs"
+	t := time.Now().Format("2006-01-02")
+	filePath := fmt.Sprintf("./logs/%s.log", t)
+	dir := "./logs"
 	if dir != "" {
 		err = os.MkdirAll(dir, os.ModePerm)
 		if err != nil {

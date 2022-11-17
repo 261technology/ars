@@ -20,12 +20,17 @@ import (
 	"github.com/harisaginting/guin/frontend"
 )
 
-const projectDirName = "guin" //  project directory name
+const projectDirName = "guin" //  project name
+
 func main() {
+	runGin()
+}
+
+func runGin() {
 	helper.LoadEnv(projectDirName)
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
-	// tracer.InitTracer()
+	log.Info(ctx, fmt.Sprintf("%s START", projectDirName))
 
 	port := helper.MustGetEnv("PORT")
 	app := gin.New()
@@ -121,4 +126,22 @@ func panicHandler(c *gin.Context, err interface{}) {
 		"status":        500,
 		"error_message": err,
 	})
+}
+
+// test input from cmd
+// wont work with hot reload
+func inputTest() {
+	fmt.Println("Enter Input 1 : ")
+	var command1 string
+	// Taking input from console
+	fmt.Scanln(&command1)
+
+	fmt.Println("Enter Input 2 : ")
+	var command2 string
+	fmt.Scanln(&command2)
+
+	samplePrintInput(command1, command2)
+}
+func samplePrintInput(command1, command2 string) {
+	fmt.Printf("command1:%s, command2:%s\n", command1, command2)
 }
