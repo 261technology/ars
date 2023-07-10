@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/guin/common/utils/helper"
-	"github.com/harisaginting/guin/model"
+	"github.com/harisaginting/gwyn/common/utils/helper"
+	"github.com/harisaginting/gwyn/model"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

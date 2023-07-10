@@ -1,21 +1,20 @@
-package shorten
+package repositories
 
 import (
 	"context"
 
-	"github.com/harisaginting/guin/common/log"
-	"github.com/harisaginting/guin/common/utils/helper"
-	database "github.com/harisaginting/guin/db"
-	"github.com/harisaginting/guin/db/table"
+	"github.com/harisaginting/gwyn/common/log"
+	"github.com/harisaginting/gwyn/common/utils/helper"
+	model "github.com/harisaginting/gwyn/models"
+	dao "github.com/harisaginting/gwyn/models/dao"
+	httpModel "github.com/harisaginting/gwyn/models/http"
 )
 
-type Repository struct{}
+func (repo *Database) Get(ctx context.Context, p *model.Shorten) (err error) {
+	qx := Connection()
+	defer Close(qx)
 
-func (repo *Repository) Get(ctx context.Context, p *Shorten) (err error) {
-	qx := database.Connection()
-	defer database.Close(qx)
-
-	var table table.Shorten
+	var table dao.Shorten
 
 	if p.ID != 0 {
 		table.ID = p.ID
@@ -24,7 +23,7 @@ func (repo *Repository) Get(ctx context.Context, p *Shorten) (err error) {
 		log.Error(ctx, err)
 	} else {
 		r := qx.Debug().Where("shortcode = ?", p.Shortcode).First(&table)
-		if !database.ErrDb(r.Error) {
+		if !ErrDb(r.Error) {
 			err = r.Error
 			log.Error(ctx, err)
 		}
@@ -43,11 +42,11 @@ func (repo *Repository) Get(ctx context.Context, p *Shorten) (err error) {
 	return
 }
 
-func (repo *Repository) FindAll(ctx context.Context) (data []Shorten, err error) {
-	qx := database.Connection()
-	defer database.Close(qx)
+func (repo *Database) FindAll(ctx context.Context) (data []model.Shorten, err error) {
+	qx := Connection()
+	defer Close(qx)
 
-	var table []table.Shorten
+	var table []dao.Shorten
 	qx.Find(&table)
 	if qx.Error != nil {
 		err = qx.Error
@@ -55,7 +54,7 @@ func (repo *Repository) FindAll(ctx context.Context) (data []Shorten, err error)
 	}
 
 	if len(table) == 0 {
-		data = make([]Shorten, 0)
+		data = make([]model.Shorten, 0)
 	} else {
 		for i, v := range table {
 			if v.StartDate != nil {
@@ -72,9 +71,9 @@ func (repo *Repository) FindAll(ctx context.Context) (data []Shorten, err error)
 	return
 }
 
-func (repo *Repository) Create(ctx context.Context, req RequestCreate) (shorten table.Shorten, err error) {
-	qx := database.Connection()
-	defer database.Close(qx)
+func (repo *Database) Create(ctx context.Context, req httpModel.RequestCreate) (shorten dao.Shorten, err error) {
+	qx := Connection()
+	defer Close(qx)
 
 	tx := qx.Begin()
 	shorten.Shortcode = req.Shortcode
@@ -92,11 +91,11 @@ func (repo *Repository) Create(ctx context.Context, req RequestCreate) (shorten 
 	return
 }
 
-func (repo *Repository) Execute(ctx context.Context, p Shorten) (err error) {
-	qx := database.Connection()
-	defer database.Close(qx)
+func (repo *Database) Execute(ctx context.Context, p model.Shorten) (err error) {
+	qx := Connection()
+	defer Close(qx)
 
-	var shorten table.Shorten
+	var shorten dao.Shorten
 	helper.AdjustStructToStruct(p, &shorten)
 	shorten.StartDate, err = helper.FormatToDateTime(p.StartDate)
 	if err != nil {

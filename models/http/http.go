@@ -1,4 +1,6 @@
-package shorten
+package http
+
+import model "github.com/harisaginting/gwyn/models"
 
 type RequestCreate struct {
 	URL       string `json:"url"`
@@ -16,14 +18,6 @@ type ResponseStatus struct {
 }
 
 type ResponseList struct {
-	Items []Shorten `json:"items"`
-	Total int       `json:"total"`
-}
-type Shorten struct {
-	ID            int    `json:"id"`
-	Shortcode     string `json:"shortcode"`
-	Url           string `json:"url"`
-	RedirectCount int64  `json:"redirectCount"`
-	LastSeenDate  string `json:"lastSeenDate"`
-	StartDate     string `json:"startDate"`
+	Items []model.Shorten `json:"items"`
+	Total int             `json:"total"`
 }

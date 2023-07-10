@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/guin/common/utils/helper"
+	"github.com/harisaginting/gwyn/common/utils/helper"
 )
 
 type Message struct {

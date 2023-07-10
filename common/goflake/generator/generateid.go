@@ -3,7 +3,7 @@ package generator
 import (
 	"regexp"
 
-	"github.com/harisaginting/guin/common/goflake/components"
+	"github.com/harisaginting/gwyn/common/goflake/components"
 )
 
 // GenerateIdentifier is the function that takes all of the components and generates the

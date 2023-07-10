@@ -1,23 +1,23 @@
-package api
+package router
 
 import (
 	"github.com/gin-gonic/gin"
-	shorten "github.com/harisaginting/guin/api/v1/shorten"
+	controller "github.com/harisaginting/gwyn/controllers"
 )
 
 // Swagger Config
-// @title GUIN
+// @title gwyn
 // @version 1.0
-// @description GUIN
+// @description gwyn
 // @host localhost:4000
 // @BasePath /
 // @schemes http
 // @query.collection.format multi
 // @contact.name Harisa Ginting
 // @contact.url ”
-func V1(r *gin.RouterGroup) {
+func Api(r *gin.RouterGroup) {
 	// Dependency injection
-	var shortenController shorten.Controller
+	shortenController := controller.ShortenController{}
 
 	// group v1
 	v1 := r.Group("v1")

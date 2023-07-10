@@ -1,4 +1,4 @@
-package shorten
+package controllers
 
 import (
 	"encoding/json"
@@ -6,16 +6,18 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/guin/common/http/response"
-	"github.com/harisaginting/guin/common/log"
+	"github.com/harisaginting/gwyn/common/http/response"
+	"github.com/harisaginting/gwyn/common/log"
+	httpModel "github.com/harisaginting/gwyn/models/http"
+	service "github.com/harisaginting/gwyn/services"
 )
 
-type Controller struct {
-	service Service
+type ShortenController struct {
+	service service.ShortenService
 }
 
-func ProviderController(s Service) Controller {
-	return Controller{
+func ProviderShortenController(s service.ShortenService) ShortenController {
+	return ShortenController{
 		service: s,
 	}
 }
@@ -23,10 +25,10 @@ func ProviderController(s Service) Controller {
 /**
  * @Description list all shorten url
  */
-func (ctrl *Controller) Get(c *gin.Context) {
+func (ctrl *ShortenController) Get(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	var responseBody ResponseList
+	var responseBody httpModel.ResponseList
 	ctrl.service.List(ctx, &responseBody)
 
 	response.Json(c, responseBody)
@@ -41,14 +43,14 @@ func (ctrl *Controller) Get(c *gin.Context) {
 // @Failure 500 {object} response.Message "internal server error"
 // @Produce json
 // @Router /{code}/status [get]
-func (ctrl *Controller) Status(c *gin.Context) {
+func (ctrl *ShortenController) Status(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	code := c.Param("code")
 	d, status, err := ctrl.service.Status(ctx, code)
 	switch status {
 	case http.StatusOK:
-		res := ResponseStatus{
+		res := httpModel.ResponseStatus{
 			StartDate:     d.StartDate,
 			LastSeenDate:  d.LastSeenDate,
 			RedirectCount: d.RedirectCount,
@@ -72,7 +74,7 @@ func (ctrl *Controller) Status(c *gin.Context) {
 // @Failure 500 {object} response.Message "internal server error"
 // @Produce json
 // @Router /{code} [get]
-func (ctrl *Controller) Execute(c *gin.Context) {
+func (ctrl *ShortenController) Execute(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	code := c.Param("code")
@@ -100,10 +102,10 @@ func (ctrl *Controller) Execute(c *gin.Context) {
 // @Failure 500 {object} response.Message "internal server error"
 // @Produce json
 // @Router / [post]
-func (ctrl *Controller) Create(c *gin.Context) {
+func (ctrl *ShortenController) Create(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	var requestBody RequestCreate
+	var requestBody httpModel.RequestCreate
 	request, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Error(ctx, err)
@@ -120,7 +122,7 @@ func (ctrl *Controller) Create(c *gin.Context) {
 	d, status, err := ctrl.service.Create(ctx, requestBody)
 	switch status {
 	case http.StatusCreated:
-		response.StatusCreated(c, ResponseCreate{Shortcode: d.Shortcode})
+		response.StatusCreated(c, httpModel.ResponseCreate{Shortcode: d.Shortcode})
 	case http.StatusNotFound:
 		response.BadRequest(c, err.Error())
 	case http.StatusConflict:

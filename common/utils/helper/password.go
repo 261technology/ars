@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/harisaginting/guin/common/goflake/generator"
-	"github.com/harisaginting/guin/model"
+	"github.com/harisaginting/gwyn/common/goflake/generator"
+	"github.com/harisaginting/gwyn/model"
 	"golang.org/x/crypto/bcrypt"
 )
 
