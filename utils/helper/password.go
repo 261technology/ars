@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/harisaginting/guin/common/goflake/generator"
-	"github.com/harisaginting/guin/model"
+	httpModel "github.com/harisaginting/gwyn/models/http"
+	"github.com/harisaginting/gwyn/utils/jwt/generator"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -38,13 +38,13 @@ func ComparePasswords(hashedPwd, plainPwd string) bool {
 func GenerateToken(username, role, bd string) (signedToken string, err error) {
 	expireAt := time.Now().Add(time.Hour * 72)
 	tokenKey := generator.GenerateIdentifier()
-	claims := model.AuthClaim{
+	claims := httpModel.AuthClaim{
 		Username: username,
 		Role:     role,
 		Bd:       bd,
 		TokenKey: tokenKey,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expireAt.Unix(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expireAt),
 			Issuer:    AppName,
 		},
 	}

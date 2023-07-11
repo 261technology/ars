@@ -1,14 +1,16 @@
-package db
+package repositories
 
 import (
 	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/guin/common/utils/helper"
+	"github.com/harisaginting/gwyn/utils/helper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+type Database struct{}
 
 func Connection() *gorm.DB {
 	var (

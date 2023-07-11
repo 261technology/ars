@@ -13,14 +13,14 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	routeApi "github.com/harisaginting/guin/api"
-	"github.com/harisaginting/guin/common/log"
-	"github.com/harisaginting/guin/common/utils/helper"
-	database "github.com/harisaginting/guin/db"
-	"github.com/harisaginting/guin/frontend"
+	"github.com/harisaginting/gwyn/frontend"
+	repo "github.com/harisaginting/gwyn/repositories"
+	router "github.com/harisaginting/gwyn/routers"
+	"github.com/harisaginting/gwyn/utils/helper"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
-const projectDirName = "guin" //  project name
+const projectDirName = "gwyn" //  project name
 
 func main() {
 	runGin()
@@ -45,8 +45,9 @@ func runGin() {
 	app.LoadHTMLGlob("./frontend/page/*.html")
 
 	plain := app.Group("")
+
 	// API
-	routeApi.V1(plain)
+	router.Api(plain)
 	// PAGE
 	frontend.Page(plain)
 
@@ -80,9 +81,9 @@ func ginConfig(ctx context.Context, app *gin.Engine) {
 	app.Use(gin.Logger())
 
 	// DB CONNECTION
-	db := database.Connection()
-	database.Migration(db)
-	app.Use(database.Inject(db))
+	db := repo.Connection()
+	// repo.Migration(db)
+	app.Use(repo.Inject(db))
 
 	// get default url request
 	app.UseRawPath = true

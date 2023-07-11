@@ -1,4 +1,4 @@
-package model
+package http
 
 import (
 	"github.com/golang-jwt/jwt/v4"
@@ -9,7 +9,7 @@ type AuthClaim struct {
 	Role     string `json:"role"`
 	Bd       string `json:"bd"`
 	TokenKey string `json:"token_key"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 type Page struct {

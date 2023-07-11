@@ -1,4 +1,4 @@
-package shorten
+package services
 
 import (
 	"context"
@@ -6,16 +6,19 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/harisaginting/guin/common/goflake/generator"
-	"github.com/harisaginting/guin/common/log"
-	"github.com/harisaginting/guin/common/utils/helper"
+	model "github.com/harisaginting/gwyn/models"
+	httpModel "github.com/harisaginting/gwyn/models/http"
+	repo "github.com/harisaginting/gwyn/repositories"
+	"github.com/harisaginting/gwyn/utils/helper"
+	"github.com/harisaginting/gwyn/utils/jwt/generator"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
-type Service struct {
-	repo Repository
+type ShortenService struct {
+	repo repo.Database
 }
 
-func (service *Service) List(ctx context.Context, res *ResponseList) (err error) {
+func (service *ShortenService) List(ctx context.Context, res *httpModel.ResponseList) (err error) {
 	shortens, err := service.repo.FindAll(ctx)
 	if err != nil {
 		log.Error(ctx, err)
@@ -26,7 +29,7 @@ func (service *Service) List(ctx context.Context, res *ResponseList) (err error)
 	return
 }
 
-func (service *Service) Create(ctx context.Context, req RequestCreate) (res ResponseCreate, status int, err error) {
+func (service *ShortenService) Create(ctx context.Context, req httpModel.RequestCreate) (res httpModel.ResponseCreate, status int, err error) {
 	status = http.StatusInternalServerError
 	req.URL = helper.AdjustUrl(req.URL)
 	tr := &http.Transport{
@@ -55,7 +58,7 @@ func (service *Service) Create(ctx context.Context, req RequestCreate) (res Resp
 	if req.Shortcode == "" {
 		for {
 			req.Shortcode = generator.GenerateIdentifier()
-			check := Shorten{Shortcode: req.Shortcode}
+			check := model.Shorten{Shortcode: req.Shortcode}
 			service.repo.Get(ctx, &check)
 			if check.ID == 0 {
 				break
@@ -68,7 +71,7 @@ func (service *Service) Create(ctx context.Context, req RequestCreate) (res Resp
 			status = http.StatusUnprocessableEntity
 			return
 		} else {
-			check := Shorten{Shortcode: req.Shortcode}
+			check := model.Shorten{Shortcode: req.Shortcode}
 			service.repo.Get(ctx, &check)
 			if check.ID != 0 {
 				err = errors.New("The desired shortcode is already in use. ")
@@ -88,7 +91,7 @@ func (service *Service) Create(ctx context.Context, req RequestCreate) (res Resp
 	return
 }
 
-func (service *Service) Status(ctx context.Context, code string) (res Shorten, status int, err error) {
+func (service *ShortenService) Status(ctx context.Context, code string) (res model.Shorten, status int, err error) {
 	status = http.StatusInternalServerError
 	res.Shortcode = code
 	err = service.repo.Get(ctx, &res)
@@ -107,7 +110,7 @@ func (service *Service) Status(ctx context.Context, code string) (res Shorten, s
 	return
 }
 
-func (service *Service) Execute(ctx context.Context, code string) (res Shorten, status int, err error) {
+func (service *ShortenService) Execute(ctx context.Context, code string) (res model.Shorten, status int, err error) {
 	status = http.StatusInternalServerError
 	res.Shortcode = code
 	err = service.repo.Get(ctx, &res)
