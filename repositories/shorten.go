@@ -3,11 +3,11 @@ package repositories
 import (
 	"context"
 
-	"github.com/harisaginting/gwyn/common/log"
-	"github.com/harisaginting/gwyn/common/utils/helper"
 	model "github.com/harisaginting/gwyn/models"
 	dao "github.com/harisaginting/gwyn/models/dao"
 	httpModel "github.com/harisaginting/gwyn/models/http"
+	"github.com/harisaginting/gwyn/utils/helper"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
 func (repo *Database) Get(ctx context.Context, p *model.Shorten) (err error) {

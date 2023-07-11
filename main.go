@@ -13,11 +13,11 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/harisaginting/gwyn/common/log"
-	"github.com/harisaginting/gwyn/common/utils/helper"
 	"github.com/harisaginting/gwyn/frontend"
 	repo "github.com/harisaginting/gwyn/repositories"
 	router "github.com/harisaginting/gwyn/routers"
+	"github.com/harisaginting/gwyn/utils/helper"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
 const projectDirName = "gwyn" //  project name

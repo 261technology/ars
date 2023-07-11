@@ -6,12 +6,12 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/harisaginting/gwyn/common/goflake/generator"
-	"github.com/harisaginting/gwyn/common/log"
-	"github.com/harisaginting/gwyn/common/utils/helper"
 	model "github.com/harisaginting/gwyn/models"
 	httpModel "github.com/harisaginting/gwyn/models/http"
 	repo "github.com/harisaginting/gwyn/repositories"
+	"github.com/harisaginting/gwyn/utils/helper"
+	"github.com/harisaginting/gwyn/utils/jwt/generator"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
 type ShortenService struct {

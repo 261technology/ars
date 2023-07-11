@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/gwyn/common/http/response"
-	"github.com/harisaginting/gwyn/common/log"
 	httpModel "github.com/harisaginting/gwyn/models/http"
 	service "github.com/harisaginting/gwyn/services"
+	"github.com/harisaginting/gwyn/utils/http/response"
+	"github.com/harisaginting/gwyn/utils/log"
 )
 
 type ShortenController struct {

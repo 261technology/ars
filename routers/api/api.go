@@ -5,15 +5,8 @@ import (
 	"github.com/harisaginting/gwyn/routers/api/shorten"
 )
 
-type Api struct {
-	group *gin.RouterGroup
-}
-
-func New(group *gin.RouterGroup) (v Api) {
-	v.group = group.Group("api")
-
-	// add route shorten
+func Implement(group *gin.RouterGroup) {
+	group = group.Group("api")
+	//implement group shorten
 	shorten.Add(group)
-
-	return
 }

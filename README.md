@@ -1,4 +1,6 @@
 # GWYN
+## GO Starter ##
+[GIN](https://github.com/gin-gonic/gin) template starter boilerplate
 
 ### RUN DEVELOPMENT ###
 ```sh run``` 

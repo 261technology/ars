@@ -4,16 +4,16 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/gwyn/common/utils/helper"
-	"github.com/harisaginting/gwyn/model"
+	httpModel "github.com/harisaginting/gwyn/models/http"
+	"github.com/harisaginting/gwyn/utils/helper"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-var page model.Page
+var page httpModel.Page
 
 func init() {
-	page = model.Page{
+	page = httpModel.Page{
 		Now:    helper.Now().Format("2006-01-02 15:04:05"),
 		Domain: helper.MustGetEnv("DOMAIN"),
 	}

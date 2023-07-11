@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	controller "github.com/harisaginting/gwyn/controllers"
+	api "github.com/harisaginting/gwyn/routers/api"
 )
 
 // Swagger Config
@@ -16,19 +16,6 @@ import (
 // @contact.name Harisa Ginting
 // @contact.url ”
 func Api(r *gin.RouterGroup) {
-	// Dependency injection
-	shortenController := controller.ShortenController{}
-
-	// group v1
-	v1 := r.Group("v1")
-	{
-		// config
-		apiShortenGroup := v1.Group("shorten")
-		{
-			apiShortenGroup.POST("/", shortenController.Create)
-		}
-	}
-	r.POST("/shorten", shortenController.Create)
-	r.GET("/:code", shortenController.Execute)
-	r.GET("/:code/stats", shortenController.Status)
+	// api
+	api.Implement(r)
 }

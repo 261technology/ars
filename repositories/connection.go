@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harisaginting/gwyn/common/utils/helper"
+	"github.com/harisaginting/gwyn/utils/helper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
