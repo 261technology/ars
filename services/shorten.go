@@ -14,11 +14,18 @@ import (
 	"github.com/harisaginting/gwyn/utils/log"
 )
 
-type ShortenService struct {
-	repo repo.Database
+type ShortenService interface {
+	List(ctx context.Context, res *httpModel.ResponseList) (err error)
+	Create(ctx context.Context, req httpModel.RequestCreate) (res httpModel.ResponseCreate, status int, err error)
+	Status(ctx context.Context, code string) (res model.Shorten, status int, err error)
+	Execute(ctx context.Context, code string) (res model.Shorten, status int, err error)
 }
 
-func (service *ShortenService) List(ctx context.Context, res *httpModel.ResponseList) (err error) {
+type Shorten struct {
+	repo repo.ShortenRepository
+}
+
+func (service *Shorten) List(ctx context.Context, res *httpModel.ResponseList) (err error) {
 	shortens, err := service.repo.FindAll(ctx)
 	if err != nil {
 		log.Error(ctx, err)
@@ -29,7 +36,7 @@ func (service *ShortenService) List(ctx context.Context, res *httpModel.Response
 	return
 }
 
-func (service *ShortenService) Create(ctx context.Context, req httpModel.RequestCreate) (res httpModel.ResponseCreate, status int, err error) {
+func (service *Shorten) Create(ctx context.Context, req httpModel.RequestCreate) (res httpModel.ResponseCreate, status int, err error) {
 	status = http.StatusInternalServerError
 	req.URL = helper.AdjustUrl(req.URL)
 	tr := &http.Transport{
@@ -91,7 +98,7 @@ func (service *ShortenService) Create(ctx context.Context, req httpModel.Request
 	return
 }
 
-func (service *ShortenService) Status(ctx context.Context, code string) (res model.Shorten, status int, err error) {
+func (service *Shorten) Status(ctx context.Context, code string) (res model.Shorten, status int, err error) {
 	status = http.StatusInternalServerError
 	res.Shortcode = code
 	err = service.repo.Get(ctx, &res)
@@ -110,7 +117,7 @@ func (service *ShortenService) Status(ctx context.Context, code string) (res mod
 	return
 }
 
-func (service *ShortenService) Execute(ctx context.Context, code string) (res model.Shorten, status int, err error) {
+func (service *Shorten) Execute(ctx context.Context, code string) (res model.Shorten, status int, err error) {
 	status = http.StatusInternalServerError
 	res.Shortcode = code
 	err = service.repo.Get(ctx, &res)
