@@ -1,6 +1,9 @@
 # GWYN
 ## GO Starter ##
-[GIN](https://github.com/gin-gonic/gin) template starter boilerplate
+[GIN](https://github.com/gin-gonic/gin) go framework router handler
+[Testify](https://github.com/stretchr/testify) go test toolkit 
+[Mockery](https://github.com/vektra/mockery) auto generator mock interface
+
 
 ### RUN DEVELOPMENT ###
 ```sh run``` 

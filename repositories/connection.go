@@ -10,8 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Database struct{}
-
 func Connection() *gorm.DB {
 	var (
 		dbUser  = helper.MustGetEnv("DB_USER")

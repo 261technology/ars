@@ -10,7 +10,17 @@ import (
 	"github.com/harisaginting/gwyn/utils/log"
 )
 
-func (repo *Database) Get(ctx context.Context, p *model.Shorten) (err error) {
+type ShortenRepository interface {
+	Get(ctx context.Context, p *model.Shorten) (err error)
+	FindAll(ctx context.Context) (data []model.Shorten, err error)
+	Create(ctx context.Context, req httpModel.RequestCreate) (shorten dao.Shorten, err error)
+	Execute(ctx context.Context, p model.Shorten) (err error)
+}
+
+type Shorten struct {
+}
+
+func (repo *Shorten) Get(ctx context.Context, p *model.Shorten) (err error) {
 	qx := Connection()
 	defer Close(qx)
 
@@ -42,7 +52,7 @@ func (repo *Database) Get(ctx context.Context, p *model.Shorten) (err error) {
 	return
 }
 
-func (repo *Database) FindAll(ctx context.Context) (data []model.Shorten, err error) {
+func (repo *Shorten) FindAll(ctx context.Context) (data []model.Shorten, err error) {
 	qx := Connection()
 	defer Close(qx)
 
@@ -71,7 +81,7 @@ func (repo *Database) FindAll(ctx context.Context) (data []model.Shorten, err er
 	return
 }
 
-func (repo *Database) Create(ctx context.Context, req httpModel.RequestCreate) (shorten dao.Shorten, err error) {
+func (repo *Shorten) Create(ctx context.Context, req httpModel.RequestCreate) (shorten dao.Shorten, err error) {
 	qx := Connection()
 	defer Close(qx)
 
@@ -91,7 +101,7 @@ func (repo *Database) Create(ctx context.Context, req httpModel.RequestCreate) (
 	return
 }
 
-func (repo *Database) Execute(ctx context.Context, p model.Shorten) (err error) {
+func (repo *Shorten) Execute(ctx context.Context, p model.Shorten) (err error) {
 	qx := Connection()
 	defer Close(qx)
 
