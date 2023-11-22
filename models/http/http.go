@@ -21,3 +21,13 @@ type ResponseList struct {
 	Items []model.Shorten `json:"items"`
 	Total int             `json:"total"`
 }
+
+type ResponseListCars struct {
+	Items []model.Car `json:"items"`
+	Total int         `json:"total"`
+}
+
+type ResponseListCars2 struct {
+	Items [][]string `json:"items"`
+	Total int        `json:"total"`
+}

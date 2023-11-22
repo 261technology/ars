@@ -23,6 +23,10 @@ func LoadEnv(projectDirName string) {
 	godotenv.Load(string(rootPath) + `/.env`)
 }
 
+func LoadEnv2() {
+	godotenv.Load()
+}
+
 // MustGetEnv get environment value
 func MustGetEnv(key string) string {
 	value := os.Getenv(key)

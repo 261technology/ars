@@ -14,20 +14,19 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/harisaginting/gwyn/frontend"
-	repo "github.com/harisaginting/gwyn/repositories"
 	router "github.com/harisaginting/gwyn/routers"
 	"github.com/harisaginting/gwyn/utils/helper"
 	"github.com/harisaginting/gwyn/utils/log"
 )
 
-const projectDirName = "gwyn" //  project name
+const projectDirName = "as" //  project name
 
 func main() {
 	runGin()
 }
 
 func runGin() {
-	helper.LoadEnv(projectDirName)
+	helper.LoadEnv2()
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	log.Info(ctx, fmt.Sprintf("%s START", projectDirName))
@@ -81,9 +80,9 @@ func ginConfig(ctx context.Context, app *gin.Engine) {
 	app.Use(gin.Logger())
 
 	// DB CONNECTION
-	db := repo.Connection()
+	// db := repo.Connection()
 	// repo.Migration(db)
-	app.Use(repo.Inject(db))
+	// app.Use(repo.Inject(db))
 
 	// get default url request
 	app.UseRawPath = true
